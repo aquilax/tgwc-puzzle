@@ -13,8 +13,7 @@ func TestGenerate(t *testing.T) {
 	tests := []struct {
 		name    string
 		args    args
-		want    *Puzzle
-		wantErr bool
+		want    Puzzle
 	}{
 		{
 			name: "Generates solution",
@@ -28,7 +27,7 @@ func TestGenerate(t *testing.T) {
 					"crecdrc",
 				},
 			},
-			want: &(Puzzle{
+			want: Puzzle{
 				Letter{
 					'a',
 					[]Row{
@@ -47,17 +46,12 @@ func TestGenerate(t *testing.T) {
 						Row{"cre", "drc"},
 					},
 				},
-			}),
-			wantErr: false,
+			},
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got, err := Generate(tt.args.word, tt.args.dictionary)
-			if (err != nil) != tt.wantErr {
-				t.Errorf("Generate() error = %v, wantErr %v", err, tt.wantErr)
-				return
-			}
+			got := Generate(tt.args.word, tt.args.dictionary)
 			if !reflect.DeepEqual(got, tt.want) {
 				t.Errorf("Generate() = %v, want %v", got, tt.want)
 			}

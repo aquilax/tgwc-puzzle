@@ -7,21 +7,21 @@ import (
 
 // Row contains possible word combination
 type Row struct {
-	before string
-	after  string
+	Before string
+	After  string
 }
 
 // Letter represents a letter of the puzle of possible combinations for words
 type Letter struct {
-	ltr  rune
-	rows []Row
+	Ltr  rune
+	Rows []Row
 }
 
 // Puzzle represents new puzzle
 type Puzzle []Letter
 
 // Generate creates new puzzle, given word and dictionary of words
-func Generate(word string, dictionary []string) (*Puzzle, error) {
+func Generate(word string, dictionary []string) Puzzle {
 	puzzle := make(Puzzle, len(word))
 	runes := []rune(word)
 	sort.Sort(sort.StringSlice(dictionary))
@@ -31,7 +31,7 @@ func Generate(word string, dictionary []string) (*Puzzle, error) {
 			findMatches(r, dictionary),
 		}
 	}
-	return &puzzle, nil
+	return puzzle
 }
 
 func findMatches(r rune, dictionary []string) []Row {
@@ -42,15 +42,16 @@ func findMatches(r rune, dictionary []string) []Row {
 			wordIndexes = append(wordIndexes, i)
 		}
 	}
+	ld := len(dictionary)
 	for _, i := range wordIndexes {
 		for p, l := range []rune(dictionary[i]) {
 			if l == r {
 				left := dictionary[i][:p]
 				right := dictionary[i][p+1:]
-				l := sort.SearchStrings(dictionary, left)
-				if dictionary[l] == left {
-					r := sort.SearchStrings(dictionary, right)
-					if dictionary[r] == right {
+				le := sort.SearchStrings(dictionary, left)
+				if le < ld && dictionary[le] == left {
+					ri := sort.SearchStrings(dictionary, right)
+					if ri < ld && dictionary[ri] == right {
 						result = append(result, Row{left, right})
 					}
 				}
