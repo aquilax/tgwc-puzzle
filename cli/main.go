@@ -24,7 +24,7 @@ func main() {
 	scanner := bufio.NewScanner(file)
 	for scanner.Scan() {
 		w := scanner.Text()
-		if len(w) > 5 && strings.IndexRune(w, '\'') == -1 {
+		if len(w) > 2 && strings.IndexRune(w, '\'') == -1 {
 			dictionary = append(dictionary, strings.ToLower(w))
 		}
 	}

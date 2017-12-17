@@ -44,10 +44,11 @@ func findMatches(r rune, dictionary []string) []Row {
 	}
 	ld := len(dictionary)
 	for _, i := range wordIndexes {
-		for p, l := range []rune(dictionary[i]) {
+		word := []rune([]rune(dictionary[i]))
+		for p, l := range word {
 			if l == r {
-				left := dictionary[i][:p]
-				right := dictionary[i][p+1:]
+				left := string(word[:p])
+				right := string(word[p+1:])
 				le := sort.SearchStrings(dictionary, left)
 				if le < ld && dictionary[le] == left {
 					ri := sort.SearchStrings(dictionary, right)
