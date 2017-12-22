@@ -49,11 +49,13 @@ func findMatches(r rune, dictionary []string) []Row {
 			if l == r {
 				left := string(word[:p])
 				right := string(word[p+1:])
-				le := sort.SearchStrings(dictionary, left)
-				if le < ld && dictionary[le] == left {
-					ri := sort.SearchStrings(dictionary, right)
-					if ri < ld && dictionary[ri] == right {
-						result = append(result, Row{left, right})
+				if len(left) > 0 && len(right) > 0 {
+					le := sort.SearchStrings(dictionary, left)
+					if le < ld && dictionary[le] == left {
+						ri := sort.SearchStrings(dictionary, right)
+						if ri < ld && dictionary[ri] == right {
+							result = append(result, Row{left, right})
+						}
 					}
 				}
 			}

@@ -3,11 +3,19 @@ package main
 import (
 	"bufio"
 	"fmt"
+	"math/rand"
 	"os"
 	"strings"
+	"time"
 
 	tgwc "github.com/aquilax/tgwc-puzzle"
 )
+
+type solution struct {
+	left   string
+	middle string
+	right  string
+}
 
 func main() {
 	if len(os.Args) < 3 {
@@ -28,7 +36,34 @@ func main() {
 			dictionary = append(dictionary, strings.ToLower(w))
 		}
 	}
-	puzzle := tgwc.Generate(os.Args[1], dictionary)
+	puzzle := tgwc.Generate(strings.TrimSpace(os.Args[1]), dictionary)
+	if os.Args[3] == "random" {
+		// Generate single random soluton
+		rand.Seed(time.Now().Unix())
+		var sol []solution
+		leftLen := 0
+		for _, l := range puzzle {
+			if len(l.Rows) > 0 {
+				r := l.Rows[rand.Intn(len(l.Rows))]
+				if len([]rune(r.Before)) > leftLen {
+					leftLen = len([]rune(r.Before))
+				}
+				sol = append(sol, solution{
+					r.Before,
+					string(l.Ltr),
+					r.After,
+				})
+			}
+		}
+		for _, s := range sol {
+			fmt.Printf("%s%s %s %s\n",
+				strings.Repeat(" ", leftLen-len([]rune(s.left))),
+				s.left,
+				s.middle,
+				s.right)
+		}
+		return
+	}
 	for _, l := range puzzle {
 		fmt.Println(string(l.Ltr))
 		for _, r := range l.Rows {
